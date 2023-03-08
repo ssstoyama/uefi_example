@@ -24,10 +24,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"tiehuis.zig",
 				"eamodio.gitlens",
-				"AugusteRame.zls-vscode",
-				"vadimcn.vscode-lldb"
+				"vadimcn.vscode-lldb",
+				"ziglang.vscode-zig"
 			]
 		}
 	}

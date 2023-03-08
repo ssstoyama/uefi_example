@@ -1,0 +1,17 @@
+{
+  "editor.formatOnSave": true,
+  "[zig]": {
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "ziglang.vscode-zig",
+  },
+  "zig.zls.path": "/workspaces/uefi/zls",
+  "zig.zigPath": "/usr/local/bin/zig",
+  "zig.zls.enableInlayHints": true,
+  "zig.zls.enableSnippets": true,
+  "zig.zls.forceFormatting": true,
+  "zig.zls.enableAutofix": true,
+  "editor.defaultFormatter": "ziglang.vscode-zig",
+  "zig.zls.includeAtInBuiltins": true,
+  "zig.zls.inlayHintsHideRedundantParamNamesLastToken": true,
+  "zig.zls.inlayHintsHideRedundantParamNames": true
+}

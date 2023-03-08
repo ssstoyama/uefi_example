@@ -19,7 +19,9 @@ FROM debian:bullseye
 ARG zigv
 
 RUN apt update && apt install -y \
-  git
+  git \
+  qemu-system-x86 \
+  vim
 
 COPY --from=builder /tmp/${zigv} /usr/local/bin/${zigv}
 RUN ln -s /usr/local/bin/${zigv}/zig /usr/local/bin/zig
