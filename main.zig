@@ -1,6 +1,7 @@
 const uefi = @import("std").os.uefi;
 
 pub fn main() void {
+    const boot_services = uefi.system_table.boot_services.?;
     const con_in = uefi.system_table.con_in.?;
     const con_out = uefi.system_table.con_out.?;
 
@@ -8,7 +9,9 @@ pub fn main() void {
     _ = con_out.outputString(&[_:0]u16{ 'H', 'e', 'l', 'l', 'o', ' ', 'U', 'E', 'F', 'I', '!', '\r', '\n' });
     var key: uefi.protocols.InputKey = undefined;
     var str: [3]u16 = .{0} ** 3;
+    var waitidx: usize = 0;
     while (true) {
+        _ = boot_services.waitForEvent(1, &[_]uefi.Event{con_in.wait_for_key}, &waitidx);
         switch (con_in.readKeyStroke(&key)) {
             .Success => {
                 if (key.unicode_char != '\r') {
