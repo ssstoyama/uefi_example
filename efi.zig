@@ -1,10 +1,6 @@
 const uefi = @import("std").os.uefi;
 
-var st: *uefi.tables.SystemTable = undefined;
-
-pub fn ST() *uefi.tables.SystemTable {
-    return st;
-}
+pub var st: *uefi.tables.SystemTable = undefined;
 
 pub fn init(system_table: *uefi.tables.SystemTable) void {
     st = system_table;

@@ -1,6 +1,6 @@
 const uefi = @import("std").os.uefi;
 const common = @import("common.zig");
-const ST = @import("efi.zig").ST;
+const efi = @import("efi.zig");
 
 const MAX_COMMAND_LEN: usize = 100;
 
@@ -14,7 +14,7 @@ pub fn run() void {
         if (common.strcmp(&[_:0]u16{ 'h', 'e', 'l', 'l', 'o' }, @ptrCast([*:0]u16, &command)) == 0) {
             common.puts("Hello UEFI!\r\n");
         } else if (common.strcmp(&[_:0]u16{ 'c', 'l', 'e', 'a', 'r' }, @ptrCast([*:0]u16, &command)) == 0) {
-            _ = ST().con_out.?.clearScreen();
+            _ = efi.st.con_out.?.clearScreen();
         } else {
             common.puts("Command not found\r\n");
         }

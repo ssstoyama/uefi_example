@@ -1,8 +1,8 @@
 const uefi = @import("std").os.uefi;
-const ST = @import("efi.zig").ST;
+const efi = @import("efi.zig");
 
 pub fn putc(c: u8) void {
-    _ = ST().con_out.?.outputString(&[2:0]u16{ c, 0 });
+    _ = efi.st.con_out.?.outputString(&[2:0]u16{ c, 0 });
 }
 
 pub fn puts(s: []const u8) void {
@@ -15,8 +15,8 @@ pub fn getc() u16 {
     var key: uefi.protocols.InputKey = undefined;
     var waitidx: usize = undefined;
 
-    _ = ST().boot_services.?.waitForEvent(1, &[_]uefi.Event{ST().con_in.?.wait_for_key}, &waitidx);
-    while (ST().con_in.?.readKeyStroke(&key) != uefi.Status.Success) {}
+    _ = efi.st.boot_services.?.waitForEvent(1, &[_]uefi.Event{efi.st.con_in.?.wait_for_key}, &waitidx);
+    while (efi.st.con_in.?.readKeyStroke(&key) != uefi.Status.Success) {}
 
     return key.unicode_char;
 }
