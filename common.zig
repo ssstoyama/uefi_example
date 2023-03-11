@@ -1,11 +1,11 @@
 const uefi = @import("std").os.uefi;
 const ST = @import("efi.zig").ST;
 
-pub fn putc(c: u16) void {
-    _ = ST().con_out.?.outputString(&[_:0]u16{c});
+pub fn putc(c: u8) void {
+    _ = ST().con_out.?.outputString(&[2:0]u16{ c, 0 });
 }
 
-pub fn puts(s: []const u16) void {
+pub fn puts(s: []const u8) void {
     for (s) |c| {
         putc(c);
     }
@@ -25,7 +25,7 @@ pub fn gets(buf: [*:0]u16, buf_size: usize) usize {
     var i: usize = 0;
     while (i < buf_size) : (i += 1) {
         buf[i] = getc();
-        putc(buf[i]);
+        putc(@truncate(u8, buf[i]));
         if (buf[i] == '\r') {
             putc('\n');
             break;
@@ -52,7 +52,7 @@ pub fn strcmp(s1: [*:0]const u16, s2: [*:0]const u16) isize {
         if (s2[i] != 0) return -1;
         return 0;
     } else {
-        return s1[i] - s2[i];
+        return @intCast(isize, s1[i]) - @intCast(isize, s2[i]);
     }
 }
 
