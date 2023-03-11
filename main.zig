@@ -1,30 +1,11 @@
 const uefi = @import("std").os.uefi;
+const efi = @import("efi.zig");
+const shell = @import("shell.zig");
+const common = @import("common.zig");
 
 pub fn main() void {
-    const boot_services = uefi.system_table.boot_services.?;
-    const con_in = uefi.system_table.con_in.?;
-    const con_out = uefi.system_table.con_out.?;
+    _ = uefi.system_table.con_out.?.clearScreen();
+    efi.init(uefi.system_table);
 
-    _ = con_out.clearScreen();
-    _ = con_out.outputString(&[_:0]u16{ 'H', 'e', 'l', 'l', 'o', ' ', 'U', 'E', 'F', 'I', '!', '\r', '\n' });
-    var key: uefi.protocols.InputKey = undefined;
-    var str: [3]u16 = .{0} ** 3;
-    var waitidx: usize = 0;
-    while (true) {
-        _ = boot_services.waitForEvent(1, &[_]uefi.Event{con_in.wait_for_key}, &waitidx);
-        switch (con_in.readKeyStroke(&key)) {
-            .Success => {
-                if (key.unicode_char != '\r') {
-                    str[0] = key.unicode_char;
-                    str[1] = 0;
-                } else {
-                    str[0] = '\r';
-                    str[1] = '\n';
-                    str[2] = 0;
-                }
-                _ = con_out.outputString(&[3:0]u16{ str[0], str[1], str[2] });
-            },
-            else => {},
-        }
-    }
+    shell.run();
 }
