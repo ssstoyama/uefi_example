@@ -1,6 +1,8 @@
 const uefi = @import("std").os.uefi;
 const efi = @import("efi.zig");
 
+const MAX_STR_BUF: usize = 100;
+
 pub fn putc(c: u8) void {
     _ = efi.st.con_out.?.outputString(&[2:0]u16{ c, 0 });
 }
@@ -9,6 +11,35 @@ pub fn puts(s: []const u8) void {
     for (s) |c| {
         putc(c);
     }
+}
+
+pub fn putws(s: []const u16) void {
+    for (s) |c| {
+        putc(@truncate(u8, c));
+    }
+}
+
+pub fn puth(val: u64, num_digits: u8) void {
+    var i: usize = undefined;
+    var unicode_val: u16 = undefined;
+    var str: [100]u16 = .{0} ** 100;
+
+    if (num_digits <= 0) return;
+    i = num_digits - 1;
+    var v = val;
+    while (true) : (i -= 1) {
+        unicode_val = @truncate(u16, v & 0xf);
+        if (unicode_val < 0xa) {
+            str[i] = '0' + unicode_val;
+        } else {
+            str[i] = 'A' + (unicode_val - 0xa);
+        }
+        v >>= 4;
+        if (i == 0) break;
+    }
+    str[num_digits] = 0;
+
+    putws(&str);
 }
 
 pub fn getc() u16 {
